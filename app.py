@@ -1,45 +1,64 @@
 from flask import Flask, render_template, request, redirect
+from flask_sqlalchemy import SQLAlchemy
 
 app = Flask(__name__)
+app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///tasks.db'
+db = SQLAlchemy(app)
 
-tasks = []
+# Define the Task database model
+class Task(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    description = db.Column(db.String(200), nullable=False)
+    completed = db.Column(db.Boolean, default=False)
+
+    def __repr__(self):
+        return f'<Task {self.id}>'
+
+# Create database tables if they don't exist
+with app.app_context():
+    db.create_all()
 
 @app.route('/')
 def index():
-    return render_template('index.html', tasks=tasks)
+    all_tasks = Task.query.all()
+    return render_template('index.html', tasks=all_tasks)
 
 @app.route('/add', methods=['POST'])
 def add_task():
-    task = request.form.get('task')
-    if task:
-        tasks.append({'task': task, 'completed': False})
+    task_description = request.form.get('task') # Renamed variable for clarity
+    if task_description:
+        new_task = Task(description=task_description)
+        db.session.add(new_task)
+        db.session.commit()
     return redirect('/')
 
 @app.route('/complete/<int:task_id>')
 def complete_task(task_id):
-    if 0 <= task_id < len(tasks):
-        tasks[task_id]['completed'] = True
+    task = Task.query.get_or_404(task_id)
+    task.completed = True
+    db.session.commit()
     return redirect('/')
 
 @app.route('/delete/<int:task_id>')
 def delete_task(task_id):
-    if 0 <= task_id < len(tasks):
-        tasks.pop(task_id)
+    task = Task.query.get_or_404(task_id)
+    db.session.delete(task)
+    db.session.commit()
     return redirect('/')
 
 @app.route('/edit/<int:task_id>', methods=['GET', 'POST'])
 def edit_task(task_id):
-    if not (0 <= task_id < len(tasks)):
-        return redirect('/')  # Redirect if task_id is invalid
+    task = Task.query.get_or_404(task_id) # Fetch task once for both methods
 
     if request.method == 'POST':
-        updated_task = request.form.get('updated_task')
-        if updated_task:  # Ensure the updated task is not empty
-            tasks[task_id]['task'] = updated_task
-        return redirect('/')  # Redirect to index after editing or if update is empty
+        updated_description = request.form.get('updated_task')
+        if updated_description:  # Only update if the new description is not empty
+            task.description = updated_description
+            db.session.commit()
+        return redirect('/')  # Redirect after POST, regardless of update
     else: # GET request
-        task = tasks[task_id]
-        return render_template('edit.html', task=task, task_id=task_id)
+        # Task is already fetched
+        return render_template('edit.html', task=task, task_id=task_id) # Pass task_id for action URL
 
 
 if __name__ == '__main__':
