@@ -2,38 +2,60 @@
 
 A simple and efficient task management web application built using Python Flask.
 
-## Features
-- Add new tasks
-- Mark tasks as completed
-- Delete tasks
-- View a list of tasks
+---
 
-## Technologies
+## 📋 Project Description
+A simple task management web application that allows users to add, complete, and delete tasks easily. Built with Python Flask and basic HTML for frontend display.
+
+---
+
+## 🛠️ Technology Stack
 - Python 3
-- Flask (Backend Framework)
+- Flask Web Framework
 - HTML/CSS (Frontend)
 
-## Installation
+---
 
+## ✨ Features
+- Add new tasks with descriptions.
+- Mark tasks as completed.
+- Delete tasks from the list.
+- View current tasks.
+- Backend logic handled using Flask.
+- Simple frontend made with HTML templates.
+
+---
+
+## 📦 Installation and Setup Instructions
 1. Clone the repository:
     ```bash
     git clone https://github.com/yourusername/task-manager-app.git
     ```
-
-2. Navigate to the project directory:
+2. Navigate into the project directory:
     ```bash
     cd task-manager-app
     ```
-
 3. Install the dependencies:
     ```bash
     pip install -r requirements.txt
     ```
-
 4. Run the application:
     ```bash
     python app.py
     ```
+5. Open your browser and go to:
+    ```
+    http://localhost:5000/
+    ```
 
-## License
+---
+
+## 📄 Future Improvements
+- Add user authentication (login system).
+- Use a real database like SQLite or PostgreSQL instead of in-memory list.
+- Add Due Dates and Notifications.
+
+---
+
+## 📜 License
 This project is licensed under the MIT License.
