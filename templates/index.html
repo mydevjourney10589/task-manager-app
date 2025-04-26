@@ -20,6 +20,7 @@
                     {{ task.task }}
                     <a href="/complete/{{ loop.index0 }}">[Complete]</a>
                 {% endif %}
+                <a href="/edit/{{ loop.index0 }}">[Edit]</a>
                 <a href="/delete/{{ loop.index0 }}">[Delete]</a>
             </li>
         {% endfor %}
