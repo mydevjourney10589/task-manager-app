@@ -15,7 +15,7 @@
         {% for task in tasks %}
             <li>
                 {% if task.completed %}
-                    <strike>{{ task.task }}</strike>
+                    <span style="color: green;">{{ task.task }}</span>
                 {% else %}
                     {{ task.task }}
                     <a href="/complete/{{ loop.index0 }}">[Complete]</a>
